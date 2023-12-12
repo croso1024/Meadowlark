@@ -8,7 +8,19 @@
 
 > Follow 書中的主要章節一步步的擴張實做 ， 其中主程式與路由處理lib的版本直接使用編號搭配程式碼內註解說明。Views等則維持沿用
 
+### middleware_playground : 
 
+> 1.學習Express的Middleware function機制，同時使用middleware去操作session來完成一個在網頁中保存購物車狀態的功能。
+> 2.另外基於Bootstrap去建構了網站的基本外觀 , 以及快閃訊息的樣式 , 透過middleware針對Session中的內容做檢查,並添加額外訊息至Session中的方式來達成快閃訊息的渲染. 
 
+### email_service : 
+
+> 1.學習讓網頁能夠寄送email , 使用了npm的nodemailer以及SendGrid的API服務來發送信件 
+> 2.透過Handlebars的模板渲染HTML email來寄送 , 並完成一個簡化的下訂單後網站發送確認信件的服務
+
+### environment : 
+
+>1.跟隨書中介紹的生產環境考量，以log功能為例簡單完成在開發/生產環境下的log模式
+>2.使用app cluster , 這是Node的特色，使得我們的應用可以透過簡單單一server的方式水平擴展
 
 
