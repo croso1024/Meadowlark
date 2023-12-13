@@ -22,5 +22,6 @@
 
 >1.跟隨書中介紹的生產環境考量，以log功能為例簡單完成在開發/生產環境下的log模式
 >2.使用app cluster , 這是Node的特色，使得我們的應用可以透過簡單單一server的方式水平擴展
-
+>3.使用cluster讓單一server在遇到無法處理的例外時保持服務 , 實現去偵測並關閉死掉的server ,然後重開新的server
+>4.使用artillery去做壓力測試 , 讓我們的cluster去應對多個虛擬user的大量request
 

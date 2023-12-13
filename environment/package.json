@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "stress":"artillery quick --count 10 -n 20 http://localhost:3000/",
+    "stressHigh":"artillery quick --count 20 -n 50 http://localhost:3000/"
+    
   },
   "author": "Ming",
   "license": "MIT",

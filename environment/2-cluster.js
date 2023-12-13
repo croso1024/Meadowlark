@@ -21,7 +21,7 @@ function startWorker() {
 if(cluster.isMaster){
 
 //   require('os').cpus().forEach(startWorker())
-    for (let i = 0 ; i<1 ; i++){startWorker() ;  }
+    for (let i = 0 ; i<2 ; i++){startWorker() ;  }
 
 
   // 監聽所有斷線的worker , 如果發生斷線時應該會退出(exit) , 下面我們也要捕捉這個退出事件
