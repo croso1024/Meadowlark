@@ -1,0 +1,20 @@
+<!-- 
+	這裡我們定義了 section head與section scripts , 這兩個部份在被layout引用時並不會直接注入,
+	只有中間Test Page與We're ... 的部份會作為views的body被注入layout(main.handlebars) ,
+	由section定義的部份需要在layout中額外指定位置 , 方便我們可以將這個模板的邏輯寫在一起 , 但在使用時各別注入
+-->
+
+{{#section 'head'}}
+	<!-- we want Google to ignore this page -->
+	<meta name="robots" content="noindex">
+{{/section}}
+
+<h1>Test Page</h1>
+<p>We're testing some script stuff.</p>
+
+{{#section 'scripts'}}
+	<script>
+    document.querySelector('body')
+      .insertAdjacentHTML('beforeEnd', '<small>(scripting works!)</small>')
+	</script>
+{{/section}}

@@ -1,0 +1,36 @@
+<h2>Sign up for our newsletter to receive news and specials!</h2>
+
+<!-- 
+    HTML的form tag , action代表的是要處理這個表單提交的路由 , method則指定了要傳送的方法為POST ,
+    一般action的欄位有幾種作法 
+    1. 使用者看到你的表單時是使用GET方法 , 在上傳表單時你使用POST方法加上相同路由 , 這是OK的 ,這種情況可以省略action屬性
+    2. 你為了每個表單處理使用單獨的路由 , 雖然這樣你可以用GET來提交表單 , 但最好還是用POST
+
+-->
+<form class="form-horizontal" role="form"  action="/newsletter-signup/process" method="POST">
+    <!-- input tag中的name是讓後端能夠正確辨識表單所用 -->
+  <input type="hidden" name="_csrf" value="{{csrf}}">
+
+  <div class="form-group">
+    <label for="fieldName" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="fieldName" name="name">
+        </div>
+  </div>
+
+
+  <div class="form-group">
+    <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-4">
+          <input type="email" class="form-control" required id="fieldEmail" name="email">
+        </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-4">
+      <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+  </div>
+
+
+</form>
