@@ -1,6 +1,9 @@
 {{!  
     這部份是chapter7加入的 partials模板 , 注意到說我們是使用 partials.weatherContext 來作為 context物件的namespace ,  
-    這樣做是因為我們不能讓這個模板的內容干擾的原本view的context物件 ,  我們使用express的res.locals來做 (res.locals就是傳入頁面的context物件)!? 
+    這樣做是因為我們不能讓這個模板的內容干擾的原本view的context物件 , 
+    (當然也可以直接取個 context2 ,書本上還特地做兩層: partials + weatherContext 我覺得算是讓程式碼更加清晰而已 )
+    我們是使用express的res.locals來做 (res.locals就是傳入頁面的context物件) , 直接在middleware中去修改res物件 ,
+    而不是在call render的時候作為參數傳入 , 因為我們想要讓每個頁面都有這個weather內容
 
     至於名稱叫做weatherContext是因為在模板中引入partials物件的方法
 }}
@@ -8,13 +11,14 @@
 {{#section 'head'}}
   <style>
     .weatherWidget {
-      border: solid 1px blue;
+      border: solid 4px rgb(67, 200, 209);
       margin: 4px;
       padding: 4px;
     }
   </style>
 {{/section}}
 
+{{!-- Note the partials.weatherContext is an array! --}}
 <div class="weatherWidget">
   {{#each partials.weatherContext}}
     <div class="location">

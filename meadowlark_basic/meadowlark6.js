@@ -13,9 +13,9 @@
 
         const test_cookie = req.cookies.test  ;
         const test_cookie_with_signed = req.signedCookies.test_with_signed ; 
+-
 
-
-    書中講述了兩種Session用來保持狀態的架構 , 
+    書中講述了兩種Session用來保持狀態的架構 ,(都會用到cookie)
     1.讓Cookie存放所有資訊 , 這種作法最好只用在資料量少 , 而且不在意用戶端可以看到這些資訊的情況 
       這個作法我有看到叫做 Session-based cookie , 也有人叫做  Cookie-based session
 
@@ -100,7 +100,7 @@ app.use(expressSession({
     secret : credential.cookieSecret ,  // 用來簽署session的憑證 
 }))
 
-app.use(flashMiddleware) ; 
+// app.use(flashMiddleware) ; 
 
 // --------------------- 處理路由 ---------------------
 

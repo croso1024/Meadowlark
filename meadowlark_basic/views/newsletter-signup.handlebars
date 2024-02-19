@@ -3,13 +3,18 @@
 <!-- 
     HTML的form tag , action代表的是要處理這個表單提交的路由 , method則指定了要傳送的方法為POST ,
     一般action的欄位有幾種作法 
-    1. 使用者看到你的表單時是使用GET方法 , 在上傳表單時你使用POST方法加上相同路由 , 這是OK的 ,這種情況可以省略action屬性
+    1. 使用者看到你的表單時是使用GET方法 , 在上傳表單時你使用POST方法加上相同路由 , 這是OK的 ,這種情況可以省略action屬性(因為用了不同HTTP方法)
     2. 你為了每個表單處理使用單獨的路由 , 雖然這樣你可以用GET來提交表單 , 但最好還是用POST
-
 -->
 <form class="form-horizontal" role="form"  action="/newsletter-signup/process" method="POST">
     <!-- input tag中的name是讓後端能夠正確辨識表單所用 -->
   <input type="hidden" name="_csrf" value="{{csrf}}">
+
+  <!-- 透過type='hidden' , 可以讓這個輸入隱藏起來(但還是會在f12中被看到) , 
+      我們可以藉由在這邊偷塞東西來做某些事情 ,例如返回原始網頁
+   -->
+
+  <input type="hidden" name="test" , value="Try it!">
 
   <div class="form-group">
     <label for="fieldName" class="col-sm-2 control-label">Name</label>

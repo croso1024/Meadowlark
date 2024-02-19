@@ -8,22 +8,12 @@
     <a href="/about" data-test-id="about" >About us</a>
 
     <br></br>
-    We offer the 2 approach for form sumbit :  HTML / Fetch and json
-    <ul>
-        <li><a href="/newsletter-signup">Old-school form submission</a></li>
-        <li><a href="/newsletter">Async form sumbitssion (Recommended)</a></li>
-    </ul>
+    
+    <p>Wecome to Meadowlark Travel!  Please <a href="/newsletter">sign up for our newsletter</a>!</p>
+    <p>Check out our <a href="/vacations">vacation packages!</a>!</p>
+    <p>Also, please enter our <a href="/contest/vacation-photo-ajax">Vacation Photo Contest</a>!</p>
 
-    And we also have 2 approach for file upload , HTML and Fetch
-    <ul>
-        <li><a href="/contest/vacation-photo">Normal file upload by multiparty library</a></li>
-        <li><a href="/contest/vacation-photo-ajax">Async file upload by fetch</a></li>
-    </ul>
-    <!-- 
-        加入partials模板的方法就是用 > 加上 partials模板名稱 , 算繪引擎會自己去找到views/partials/weather.handlebars 
-        另外partials的語法支援 sub-directory , 例如 partials/a/xxx.handlebars 可以使用 > a/xxx 來找到 
 
-        特別注意 ,我一開始在實做這段的時候遇到的隱密bug , 如果註解內也打雙大括號會導致這邊handlebars解析異常
-    -->
+    
     {{> weather}}
 </p>

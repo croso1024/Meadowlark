@@ -6,7 +6,6 @@
 
     另外注意這一支code在首頁->加入購物車->送出購物車表單這一段
     session的更新是在送出購物車表單後進行處理 , 換句話說session第一次有購物車的值是到表單處理函式處理完轉址回去後才會出現
-
   
 */
 
@@ -80,7 +79,7 @@ app.use( requiresWaiver)
 */
 app.get('/', (req, res) => {
 
-  console.log(req.session) ; 
+  console.log( "check session content" , req.session) ; 
 
   // 如果註解掉session的部份(如下面這行) , 則當我們提交表單觸發add-to-cart後 , 重新轉址回來主頁的部份將不會紀錄任何購物車內容
   // const cart = {items:[]}

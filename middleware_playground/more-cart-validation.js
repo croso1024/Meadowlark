@@ -49,6 +49,7 @@ products.forEach(
   }
 )
 
+// 先執行三個中介函式後才執行根路由
 
 app.use(cartValidation.resetValidation)
 app.use(cartValidation.checkWaivers)

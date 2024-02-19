@@ -2,11 +2,12 @@
     透過nodemailer ,以及我們註冊好的SendGrid SMTP api去寄信件 ,
     這邊實做的時候發現說有一些部份和書上的內容已經不同 , 包括:
     - sendgrid使用的user一律為"apikey"這個字串 ,密碼則是註冊的api key , 
-    - 現在寄送郵件內容的"from"似乎一定要與自己註冊的single sender信箱一樣 , 不能像書上那樣隨便給
+    - 現在寄送郵件內容的"from"似乎一定要與自己註冊的single sender信箱一樣 , 不能像書上那樣隨便給( 例如 NO-NOT-REPLY@xxx.com )
 
   在使用如sendgrid的服務時有幾點注意 : 
   1.  我們自己做的try-catch只能捕捉到SMTP server返回給我們的error , 
-      如果是在API服務幫我們寄信的過程出錯我們沒辦法在這邊抓到 , 如果要確保信件真的有送到收信者 ,我們應該要使用sendgrid提供的服務
+      如果是在API服務幫我們寄信的過程出錯我們沒辦法在這邊抓到 , 因此要確保信件真的有送到收信者 ,我們應該要使用sendgrid提供的服務( MSA服務提供的錯誤處理 )
+
   2.  寄送大量email的時候 , 不同的mail sumbitssion agent有不同的限制 ,我們使用的sendgrid就建議不要一封信件一次寄超過1000人 
       因此需要寄給多人的時候 ,可以考慮把收信者的地址從一個list內"分batch"取出後用 await promise.all做發送 
   

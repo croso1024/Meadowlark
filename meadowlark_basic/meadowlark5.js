@@ -79,7 +79,7 @@ app.use(bodyParser.json()) ;
 app.get("/" , handler.home)  ; 
 app.get("/about" , handler.about ) ; 
 
-// 加入普通HTML表單的routing
+// 加入普通HTML表單的routing , 路由處理式來自我們定義的handler模組
 app.get("/newsletter-signup" , handler.newsletterSignup)  ; 
 app.post("/newsletter-signup/process" , handler.newsletterSignupProcess) ; 
 app.get("/newsletter-signup/thank-you" , handler.newsletterSignupThankYou) ; 

@@ -29,6 +29,7 @@
 const handler = require("./lib/handlers") ; 
 
 // 載入我們自訂的取得天氣資料的中介函式 , 但只是命名為中介函式,實際上還需要在express框架去設定
+// 當資料經過這個middleware,就會在locals.partials物件中加入weatherContext供模板使用
 const weatherMiddleware = require("./lib/middleware/weather") ; 
 
 const express = require("express") ;   

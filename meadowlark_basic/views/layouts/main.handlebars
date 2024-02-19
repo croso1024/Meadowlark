@@ -12,7 +12,7 @@
 
 
 {{!-- 
-    chapter.8/9 add Bootstrap to out website , follow the offical instruction import Boostrap with CDN  
+    chapter.8/9 add Bootstrap to our website , follow the offical instruction import Boostrap with CDN  
     notice that , in order follow the book , we use the Bootstrap 4.x version and jquery 3.x
     
     then in ch9 , we add "flash message" in our session , so if session has flash message , 
@@ -35,7 +35,6 @@
                 <img src="/img/chicken.png" height="300px" width="400px" alt="Chicken" >
             </header>
             {{{body}}}
-            {{{_sections.scripts}}} 
             {{!-- 加入快閃警告訊息, 我們用三個大括號使得我們的快閃訊息可以插入HTML模板 , 以及一個用來關閉訊息的按鈕 --}}
             {{#if flash}} 
                 <div class="alert alert-dismissible alert-{{flash.type}}">

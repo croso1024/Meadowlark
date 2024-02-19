@@ -40,10 +40,11 @@
     document.getElementById('vacationPhotoContestForm')
       .addEventListener('submit', evt => {
         evt.preventDefault()
+        console.log("Receive sumbit")
         const body = new FormData(evt.target)
         const container =
           document.getElementById('vacationPhotoContestFormContainer')
-        fetch('/api/vacation-photo-contest/{{year}}/{{month}}', { method: 'post', body })
+        fetch('/api/vacation-photo-contest/{{year}}/{{month}}', { method: 'post', body})
           .then(resp => {
             if(resp.status < 200 || resp.status >= 300)
               throw new Error(`Request failed with status ${resp.status}`)
@@ -54,7 +55,7 @@
           })
           .catch(err => {
             container.innerHTML = `<b>We're sorry, we had a problem processing ` +
-              `your submission.  Please <a href="/newsletter">try again</a>`
+              `your submission.  Please <a href="/contest/vacation-photo-ajax">try again</a>`
           })
       })
   </script>

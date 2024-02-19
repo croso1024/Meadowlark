@@ -34,9 +34,10 @@ class NewsletterSignup {
     }
 
     async save() {
+        console.log("Call save")
         /*
             這邊對應的方法就是將帳號資料保存到database中 , 而這件事情是非同步的
-            他應該要return一個promise , 依照作者的話,這邊因為我們沒有主動raise errro ,所以這個promise會被解析為success
+            他應該要return一個promise , 依照作者的話,這邊因為我們沒有主動raise errro ,所以這個promise會被解析為success (就跟return隨便一個東西一樣)
         */ 
     }
 }

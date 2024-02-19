@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint meadowlark3.js lib"
+    "lint": "eslint meadowlark6.js lib"
   },
   "author": "Ming",
   "license": "ISC",

@@ -25,3 +25,7 @@
 >3.使用cluster讓單一server在遇到無法處理的例外時保持服務 , 實現去偵測並關閉死掉的server ,然後重開新的server
 >4.使用artillery去做壓力測試 , 讓我們的cluster去應對多個虛擬user的大量request
 
+### meadowlark_mongodb & meadowlark_postgre : 
+
+>1. 擴展meadowlark中的檔案上傳功能，使用Node的檔案系統來建立與保存檔案
+>2. 將我們App的資料庫層次抽象化，分別使用mongoDB與postgreSQL來實現資料庫CRUD的界面

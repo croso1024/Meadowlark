@@ -20,10 +20,10 @@ app.use((req, res, next) => {
 })
 
 /*
-    express在處理路由時實際上都是包在try-catch結構之中,因此丟初的Error一定都會被catch到
+    express在處理路由時實際上都是包在try-catch結構之中,因此丟出的Error一定都會被catch到
     這些error都不至於讓服務停止 , 只不過客戶端和server的終端機都會跳出錯誤訊息
     (Server仍然照常運行 , 無論我們有沒有使用cluster ,client端只要換個正常路由就可以)
-    而解決因為error的異常 , 通常就是在路由最下面加入針對error的路由處理式
+    而解決因為丟出error造成的異常 , 通常就是在路由最下面加入針對error的路由處理式
 */
 app.get('/fail', (req, res) => {
     throw new Error('Nope!')
@@ -36,6 +36,7 @@ app.get('/fail', (req, res) => {
     但當執行序要執行這個程式碼時他已經拿不到背景context , 而處於未定義的狀態 . 
     最終會讓整個程式碼當機 , 雖然一般Server端程式碼不會用到setTimeout , 但在許多實際應用中我們
     仍常常會需要處理非同步的事情 , 例如database , file system以及network等 , 這邊的展示就是一個通用的例子
+    (error發生在已經離開這邊處理函式之後)
 
     下面的epic-fail路由會直接導致我們的process掛掉 , 不過我們已經在cluter的程式碼中做好了預防措施 , 
     盡管某個process運行的server掛掉了 ,我們也能偵測後重新啟動其他server,並在過程用其他仍然正常運行的server來繼續提供服務

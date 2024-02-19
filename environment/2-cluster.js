@@ -5,7 +5,9 @@
     這支程式的目的是要使用app cluster去運行我們的server , 而原始的Server主程式則在2-server.js中
     
     當我們在終端機直接執行這一支code , 他就會作為master ,"require("os").cpus().forEach(startWorker)"
-    會幫助我們依照CPU的數去執行 fork出來的這支程式就會變成worker , 就會到下半else部份,去執行server
+    會幫助我們依照CPU的數去執行fork , 注意fork的對象仍然是這一支code , 
+    但因為他們不是Master,所以會做為worker去執行server的code
+    
     
 
 
@@ -21,7 +23,7 @@ function startWorker() {
 if(cluster.isMaster){
 
 //   require('os').cpus().forEach(startWorker())
-    for (let i = 0 ; i<2 ; i++){startWorker() ;  }
+    for (let i = 0 ; i<4 ; i++){startWorker() ;  }
 
 
   // 監聽所有斷線的worker , 如果發生斷線時應該會退出(exit) , 下面我們也要捕捉這個退出事件

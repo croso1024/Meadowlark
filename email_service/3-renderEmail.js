@@ -6,7 +6,7 @@
 
     為了完善整個架構 ,因此我們配套著建立 cart-thank-you的 email與網站模板 , 
     同時透過home去讓使用者進行填寫購物車表單 
-    購物車內容的傳遞基於先前介紹過得session , 讓購物車內容可以在不同頁面之間傳遞
+    購物車內容的傳遞基於先前介紹的session , 讓購物車內容可以在不同頁面之間傳遞
 
 */
 const express = require('express')
@@ -69,12 +69,12 @@ app.get('/', (req, res) => {
     /cart/checkout HTML表單會將購物車送到這個路由來處理
     因此在這個部份我們要處理將內容存到Session , 以及確認使用者個各項內容是否正常, 
 
-    首先確認來到這頁時 session確實有存著購物遮 ,
+    首先確認來到這頁時 session確實有存著購物車 ,
     接下來我們從html form中拿出使用者名子與信箱並做檢查 . 一切ok以後
     "去渲染email的view模板" , 在這裡我們對render加入了一個Callback 
 
     回憶 render()的參數為 : res.render( views, [locals] , callback )  
-    locals是提供來"覆蓋"掉res.locals內要提供給view的context物件 , 
+    locals是提供來"覆蓋"掉res.locals內要提供給view的context物件 , (說是覆蓋但比較像是對set做add , 覆寫重複的key,其餘就是union) 
     而我們加上callback則可以使用渲染完成的模板去觸發callback
     
 */ 
@@ -99,10 +99,13 @@ app.post('/cart/checkout', (req, res, next) => {
 		email: email,
 	}
 
-    // 這一步驟的Render並不是真的渲染頁面 , 而是額外提供了一個callback
-    // 讓我們渲染完成的模板作為email模板 , 而真正用來渲染感謝頁面的render()則包在寄信函數的後方
+    // 這一步驟的Render並不是真的渲染頁面 , 而是額外提供了一個callback 
+    // 當我們提供了callback的時候 , 被渲染出來的結果並不會被直接回到client端 ,而是會作為參數傳入callback
+
+    // 讓我們渲染完成的模板作為email模板 , 而真正用來渲染感謝頁面的render()則包在寄信函數(callback)的後半段
     // {layout:null} , 這是為了避免在渲染email的時候也用到我們的網頁模板 , 當然我們也可以為email設置一個預設layout
     res.render('email/cart-thank-you', { layout: null, cart: cart },
+    // render html , 但這是要拿來寄信的
     (err,html) => {
 
         console.log('rendered email: ', html)
@@ -129,6 +132,19 @@ app.post('/cart/checkout', (req, res, next) => {
     }
   )
 })
+
+
+app.use((req, res) => {
+	console.log('(404) route not handled')
+	res.send('404 - not found')
+})
+
+app.use((err, req, res, next) => {
+	console.log('(500) unhandled error detected: ' + err.message)
+	res.send('500 - server error')
+})
+
+
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`\nnavigate to http://localhost:${port}\n`))
