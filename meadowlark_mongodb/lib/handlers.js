@@ -6,7 +6,9 @@
     現在我們要在Node的檔案系統"fs"來建立目錄來存放這些照片(用以作為中間儲存)並在後續將它們存入Database .
     具體而言我們修改了針對vacationPhotoContest這個路由的處理式,但其餘部份(newsletter , vacationPhoto)還是按照先前第八章的內容為主
 
-    !-- 但注意我這邊去除掉了原始書中使用瀏覽器sumbit的那些路由與處理式 , 統一使用fetch api來做表單與照片檔案的提交 
+    - 但注意我這邊去除掉了原始書中使用瀏覽器sumbit的那些路由與處理式 , 統一使用fetch api來做表單與照片檔案的提交 
+    - 原始書中的fs操作 , 在使用rename來移動檔案(oldPath->newPath) , 但實際上這樣做會遇到device跨區而無法做, 這邊我改成先複製,然後unlink src
+
 
     
 */
@@ -38,8 +40,9 @@ function saveContestEntry(contestName , email , year , month , photoPath){
 // 我們將這些fileSystem的function給做'promisify' , 讓他們可以使用async , await的像Synchronization的呼叫
 const { promisify } = require("util") ; 
 const mkdir = promisify(fs.mkdir) ; 
-const reneam = promisify(fs.rename) ; 
-
+const rename = promisify(fs.rename) ; 
+const copyfile = promisify(fs.copyFile) ; 
+const unlink = promisify(fs.unlink) ; 
 
 // 我們修改了原先handler中的 api.vacationPhotoContest , 將其利用本地檔案系統暫存並且存入DB
 // 注意我們動到的都是在exports.api之下的方法 , ch8提供的方法都在下面直接綁在exports上
@@ -52,8 +55,15 @@ exports.api.vacationPhotoContest = async ( req , res ,fields , files ) =>{
     const directory = vacationPhotoDirectory + '/' + Date.now() ; 
 
     const path = directory  + '/' + photo.originalFilename ;   
-    await mkdir(directory)  
-    await rename(photo.path ,path) ; 
+    await mkdir(directory)  ;
+    // await rename(photo.path ,path) ; 
+
+    // 按照書中的作法進行rename時 , 會發生node js的fs沒辦法跨硬碟去relink file (從/tmp -> home的根目錄就是跨區) 
+    // 這邊google了一下作法, 應該要先進行複製 , 接著才能做我們原本想做的 ,但我這邊打算是直接複製後刪除source
+    await copyfile( photo.path   , path ) ; 
+    await unlink( photo.path ) ; 
+
+
 
     // 我們希望能夠將用戶上傳的照片和他們的email地址,提交時間給連接起來 ,除了最基本的將這些資訊
     // 編碼進檔案名稱以外,另一種作法就是存在資料庫中 , saveContestEntry就用來處理這些事
@@ -92,29 +102,60 @@ const convertFromUSD = (value , currency) => {
 exports.listVacations = async (req , res) => { 
 
     // 我們的query只找出目前可以使用的假期商品
-    const vacations = await db.getVacations({available:true}) ;
+    const vacations = await database.getVacations({available:true}) ;
     const currency = req.session.currency || "USD" ;  
     const context = {
         currency : currency , 
+        
+        // 儘管在這邊我們看起來像是很無意義的把相同屬性重新賦予 , 但我們並沒有直接使用database回傳回來的物件的所有性質 , 
+        // 這麼做是為了避免view的context得到一堆不需要的屬性 , 除此之外也有許多合理的理由,說明我們只把必要的屬性取出並傳給view
+        // 同時在必要的時候進行轉換 , 例如price的部份
         vacations : vacations.map( vacation =>{
             return {
                 sku : vacation.sku , 
                 name : vacation.name , 
                 description : vacation.description , 
                 inSeason : vacation.inSeason , 
-                // price: convertFromUSD(vacation.price , currency) , 
-                price : "$" + vacation.price.toFixed(2) ,
+                // price : "$" + vacation.price.toFixed(2) ,
+                // 我們多增加了一個幣值轉換的function , 記得也要將幣值屬性更新到context中給view
+                price: convertFromUSD(vacation.price , currency) , 
                 qty : vacation.qty , 
             }
         } ) ,
     } 
-    // switch(currency) { 
-    //     case 'USD' : context.currencyUSD = "selected" ; break 
-    //     case 'GBP' : context.currencyGBP = "selected" ; break 
-    //     case 'BTC' : context.currencyBTC = "selected" ; break 
-    // }
+    switch(currency) { 
+        case 'USD' : context.currencyUSD = "selected" ; break 
+        case 'GBP' : context.currencyGBP = "selected" ; break 
+        case 'BTC' : context.currencyBTC = "selected" ; break 
+    }
 
     res.render('vacations' , context) ; 
+
+}
+
+exports.setCurrency = (req ,res) => {
+    console.log("Session", req.session) ; 
+    req.session.currency = req.params.currency ; 
+    return res.redirect(303 , '/vacations') ; 
+
+}
+
+// ------------------------------------------------------------
+// Part.3 加入提供假期訂閱服務的路由
+exports.notifyWhenInSeasonForm = (req ,res) => {
+
+    // 注意這邊傳入的sku就要根據使用者到底是點了哪個商品來決定 , 
+    // 我們這邊蠻手動的使用了url中的query字串來加入使用者到底點了哪個商品這件事
+    // 因此接著就是在處理式中拿出來放入context傳遞給接下來的view
+    res.render('notify-me-when-in-season'  , {sku : req.query.sku}) 
+
+}
+
+exports.notifyWhenInSeasonProcess = async (req,res)=>{
+
+    const {email , sku} = req.body ; 
+    await database.addVacationInSeasonListener(email , sku) ;  
+    return res.redirect(303 , '/vacations')
 
 }
 
@@ -122,9 +163,15 @@ exports.listVacations = async (req , res) => {
 
 
 // ------------------------------------------------------------
-// Part.3  基礎路由 , 以及改寫成只保留json模式的表單處理 , json版本的照片處理的由於是本章的重點之一,就放在上面part.1
+// Part.4  基礎路由 , 以及改寫成只保留json模式的表單處理 , json版本的照片處理的由於是本章的重點之一,就放在上面part.1
 
 exports.home = (req , res) => res.render('home') ; 
+exports.about = (req ,res ) => {
+
+    console.log('test') ; 
+    res.render('about') ; 
+
+}
 exports.notFound = (req , res) => res.render("404"); 
 exports.serverError = (err , req , res , next ) => res.render("500");
 

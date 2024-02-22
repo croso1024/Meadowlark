@@ -68,7 +68,7 @@
           return resp.json()
         })
         .then(json => {
-          container.innerHTML = '<b>Thank you for signing up!</b>' 
+          container.innerHTML = '<b>Thank you for signing up!</b>' + '<a href="/">Home</a>' 
         })
         .catch(err => {
           container.innerHTML = `<b>We're sorry, we had a problem ` +

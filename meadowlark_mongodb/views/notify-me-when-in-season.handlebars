@@ -1,0 +1,29 @@
+{{!-- 
+    
+    我們為我們的旅遊網站增加了一個對於非當季旅遊行程的訂閱功能,
+    讓使用者可以再將來該行程變得可用時接到通知.
+
+    這邊只需要讓顧客填寫email , 因為sku的資訊就是嵌入在使用者是點哪個sku下的連結進來的,
+    另外就是注意一下到vacation頁面的路徑與這邊表單post的路徑是一樣的,只靠get/post來分辨
+    
+
+
+ --}}
+<div class="formContainer">
+  <form class="form-horizontal newsletterForm" role="form"
+      action="/notify-me-when-in-season" method="POST">
+    <input type="hidden" name="sku" value="{{sku}}">
+    <div class="form-group">
+      <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+      <div class="col-sm-4">
+        <input type="email" class="form-control" required 
+          id="fieldEmail" name="email">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-4">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

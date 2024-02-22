@@ -4,6 +4,7 @@
 <form class="form-horizontal" role="form"
     id="vacationPhotoContestForm"
     enctype="multipart/form-data" method="POST"
+    {{!-- ch13.配合我整理路由這件事 , 針對action的路徑加上了api , --}}
     action="/contest/vacation-photo/{{year}}/{{month}}">
   <input type="hidden" name="_csrf" value="{{csrf}}">
   <div class="form-group">

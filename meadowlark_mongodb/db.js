@@ -8,10 +8,15 @@
     -1. 連接database
         在MongoDB的case中 , 我們使用所謂的ODM (object document mapper) , ODM可以讓我們使用javascript來操作資料庫的文件模型,
         且有些ODM也能夠讓我們使用javascript就同時使用在多種不同資料庫上 . 如果不使用ODM的話基本上就要使用該資料庫原生的查詢語言( ex. SQL in RDBMS ) 
-
         我們使用的ODM是mongoose , 
     
+    -2. 在此我們使用find()植入初始資料 , 透過在find的時候檢查database中是否已經存有資料來決定要不要插入資料
 
+    -3. 實做取得資料與更新資料的部份,並作為這個module主要提供的API ,
+        而這也是我們的資料庫抽象層的實做部份 , 使用mongoose去操作mongodb,其中一些操作與參數需要再去
+        閱讀一下相關文件才會更熟悉.
+        主要就是實現取資料的getVacation , 更新資料的 addVacationInSeasonListener
+    
 
 */
 
@@ -50,7 +55,7 @@ const VacationClass = require("./models/vacation") ;
 // 因為vacation.length已經有值,我們就不會重複插入資料
 VacationClass.find((err , vacations) => {
 
-    console.log(vacations) ; 
+    console.log(`------ We have ${vacations.length} vacation option store in Database`) ; 
 
     if (err){return console.error(err)}
     // 若資料庫已經初始化過了,這邊就跳過後面的建立假資料步驟
@@ -106,12 +111,29 @@ VacationClass.find((err , vacations) => {
 
 })
 
+const VacationInSeasonListener = require('./models/vacationInSeasonListener') ; 
+// 這邊就是database存取資料與存放資料真正的實做 , 我們只是暴露出這個界面給外面在handler處理路由時使用
+// 而這些實做會跟mongoose提供的與mongodb互動的界面有關
 module.exports = {
 
     getVacations : async ( options = {} ) => {
         return VacationClass.find(options) ; 
-    }
+    },
 
+
+    // 這邊使用updateOne來進行資料的更新 , 而這邊一個很方便的地方在於, mongoose提供了'upsert'
+    // 這個工具 , 基本上就是 insert + update的結合 
+    // 如此一來,當特定email不存在於該資料集合時 , 我們就會以該email建立一筆新的資料 , 而若存在時則會被更新
+    // $push的用意則是用來將一個值push進一個陣列
+    
+    addVacationInSeasonListener : async (email , sku)=>{
+        await VacationInSeasonListener.updateOne(
+            // p.s  該資料模型基本上就是儲存 "每個使用者訂閱了哪些sku"
+            { email } , 
+            { $push : {skus : sku}} , 
+            { upsert : true } 
+        )
+    }
 }
 
 

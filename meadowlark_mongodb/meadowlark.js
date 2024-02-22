@@ -24,7 +24,7 @@ app.engine('handlebars' , expressHandlebars.engine(
         helpers : {
             section : function(name , options){ 
                 if(!this._sections) { this._sections={} ; }  
-                this_sections[name] = options.fn(this) ; 
+                this._sections[name] = options.fn(this) ; 
                 return null ; 
             }
         }
@@ -69,8 +69,8 @@ app.use(express.static(__dirname + "/public") ) ;
 // ------------------------------------------------------------------------
 // Part.2 開始設定路由處理式
 
-
 app.get("/" , handlers.home) ; 
+app.get('/about' , handlers.about) ;
 // 只保留使用json api的表單上傳與vacationPhoto處理 , 同時vacationPhoto的處理式中加入了我們在本章才引入的
 // 本地檔案系統儲存以及Database的持久保存
 
@@ -81,19 +81,58 @@ app.post('/api/newsletter-signup' , handlers.api.newsletterSignupProcess) ;
 // json-照片上傳
 
 app.get('/api/contest/vacation-photo-ajax' , handlers.api.vacationPhotoContestAjax) ; 
-// 明天可以稍微re-factor一下 , 把處理式完全整入handler.js , 以及稍微簡化一下route
-app.post('/api/contest/vacation-photo/:year/:mouth' , (req,res) =>{
 
+// 明天可以稍微re-factor一下 , 把處理式完全整入handler.js , 以及稍微簡化一下route
+
+// 測試一下就算我主動攔截檔案上傳並改用fetch api來傳遞 , 原本的form上傳action是否仍會觸發
+app.post('/api/contest/vacation-photo/:year/:mouth' , (req,res) =>{
+    console.log("TEST : THIS IS PROVIDE FOR CONVENTION FILES UPLOADS ")
+} ) ;
+
+app.post('/api/vacation-photo-contest/:year/:mouth' , (req ,res) => {
+
+    console.log("TEST : THE FILE IS UPLOADED BY FETCH API") ; 
     const form = new multiparty.Form() ; 
-    form.parse( req , (err , fields , files )=>{
+    form.parse(req , (err , fields , files )=>{
+
         if (err) {
             return handlers.api.vacationPhotoContestError( req , res , err.message) ;    
         }
+        console.log(`Got fields :${fields}`);
+        console.log(`Got files :${files}`);
         handlers.api.vacationPhotoContest( req , res ,fields , files ) ; 
+
     })
+
+
 } )
 
-
-
 // 從Database引入旅遊資訊
-// app.get('/vacations' ,handlers.listVacations ) ; 
+app.get('/vacations' ,handlers.listVacations ) ; 
+// 這邊要特別注意一下 , 使用:currency在URL中 , 可以讓我們從處理式的 req.params中取用
+// 而這個URL可以在vacations.handlebars中批配USD,GBP與BTC三種
+app.get('/set-currency/:currency' , handlers.setCurrency ) ; 
+
+app.get('/notify-me-when-in-season' , handlers.notifyWhenInSeasonForm) ; 
+app.post('/notify-me-when-in-season' , handlers.notifyWhenInSeasonProcess ) ; 
+
+app.use(handlers.notFound) ; 
+app.use(handlers.serverError) ; 
+
+
+
+
+
+// -------------------------------------------
+// Part.3 Start App
+if (require.main == module){
+    app.listen(
+        port , ()=>{
+            console.log( `Express started on http://localhost:${port}` );
+            console.log( "Press the Ctrl-C to terminate :) " ); 
+        }
+    )
+}
+else {
+    module.exports = app 
+}

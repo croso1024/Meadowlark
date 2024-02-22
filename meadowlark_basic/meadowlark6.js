@@ -120,12 +120,8 @@ app.get("/newsletter-archive",handler.newsletterSignupThankYou) ;
 
 
 
-app.use(
-    handler.notFound
-); 
-app.use(
-    handler.serverError 
-); 
+app.use( handler.notFound ) ; 
+app.use( handler.serverError ) ; 
 
 
 
