@@ -1,13 +1,15 @@
 /*
     Chapter13.  
-        這一章開始我們要為我們的網站加入資料庫進行檔案儲存 , 這一個資料夾內存放使用MongoDB的版本
-        我們改寫在書本前1/3所製作的帶有表單處理與檔案上傳的meadowlark網站 , 
-        
-        我們主要增加了models資料夾用來定義Mongodb document collection的資料綱要,
-        並使用mongoose在db.js中時做了操作mongodb的實做.包含了列出目前有的旅遊資訊,
-        以及讓使用者可以在特定假期無法訂購的時候將其訂閱. 
-        另外就是我把原始書中的表單上傳改到只剩下fetch api的版本
+        這一章開始我們要為我們的網站加入資料庫進行檔案儲存 , 這一個資料夾內存放使用Postgre的版本.
 
+        注意因為我沒有在本機裝postgre,所以這邊的database我使用的是書中介紹的elephantSQL ,註冊的一個免費方案
+
+        對比於Mongodb使用mongoose這個ODM來處理資料綱要(我們直接定義在models/vacations.js , vacationInSeasonListener.js).
+        在RDBMS我們可能就需要手動依靠SQL來建立Schema. 總之,我們有兩種作法
+        1. 在postgre的CLI內直接透過SQL來操作
+        2. 使用postgre的javascript api來完成  
+        我們在此選擇方法2. npm install pg , 並建立一個dbinit.js 用來初始化資料庫
+        
         在本章最後,我們要回來將Session儲存在DB中,不過在此我們使用Redis來做這件事,一樣使用雲端的免費Redis服務 .
         這邊的實現不論是在mongodb的版本或postgre都一樣. 
         但我認為這邊書中的connect-redis因為和我所使用的版本差異, 我這邊需要額外install redis package,
@@ -45,8 +47,6 @@ app.set('view engine' , 'handlebars') ;
 
 // ------------  我們集成的handlebars , 以及Database的介面 , 還有cookie ,session以及request解析相關的lib
 
-// 從credential進行驗證後使用URL連線mongodb , 我這邊和書上不一樣,就是直接連接local mongodb 
-require("./db") ; 
 
 const credential = require('./credential');
 
@@ -78,7 +78,7 @@ app.use(expressSession({
     secret : credential.cookieSecret ,  // 用來簽署session的憑證 
 
     // store屬性用來指定保存session的方式,原先的預設是memeory , 我們在此使用Redis來做session的保存
-    // 使用Redis來保存後,即便我們Server重啟, user曾經使用的狀態仍然可以被記得!
+    // 使用Redis來保存後,即便我們Server重啟, user曾經使用的狀態仍然可以被記得,
     // 而若是使用預設的memory store, 只有在Server沒有重開的情況下網頁重啟能被記得
     store : new RedisStore({
         client : redisClient , 
@@ -133,6 +133,7 @@ app.post('/api/vacation-photo-contest/:year/:mouth' , (req ,res) => {
         handlers.api.vacationPhotoContest( req , res ,fields , files ) ; 
 
     })
+
 
 } )
 

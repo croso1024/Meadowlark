@@ -2,9 +2,6 @@
 此專案為跟隨 "網頁應用程式設計，使用Node和Express 2e" 書中的實做紀錄, 
 依照書中的進度自行分出的幾個學習部份。
 
-
-
-
 採用的方法是隨著章節推進不斷加入新內容 , 但Server的主程式meadlowlark則隨著進程不斷更新.
 
 
@@ -48,11 +45,14 @@
 
 ### meadowlark_mongodb & meadowlark_postgre : 
 
-    開始慢慢將我們的網頁轉為旅遊網站. 
-    並將DB與我們的應用連接,但也包含基本的node.js使用'fs'去操作local的檔案保存. 
+    份量比較大的一節，開始慢慢將我們的簡單旅遊網頁改以DB來提供資料. 
+    但也包含基本的node.js使用'fs'去操作local的檔案保存. 
     在此我們實現db的抽象層,並分別用mongodb/postgre去實做插入/查詢/更新資料的操作 ,
     並作為我們網站的旅遊商品資訊來源,並提供使用者訂閱相關旅遊資訊並保存在DB的功能.
+    並在最後一節實做一個簡單的幣值模式轉換，利用Redis來保存Session的快取進而完成記憶使用者幣值模式.
 
 >1. 擴展meadowlark中的檔案上傳功能，使用Node的檔案系統來建立與保存檔案
 >2. 將我們App的資料庫層次抽象化，分別使用mongoDB與postgreSQL來實現資料庫CRUD的界面
 >3. 使用MongoDB的ODM mongoose來定義資料Schema , 並實做抽象層中的取得資料與更新資料
+>4. 使用線上Postgre服務，連接與實現取資料和更新
+>5. 使用線上Redis服務，將Session store以Redis進行保存，讓使用者選取的幣值模式能夠在即使Server重啟的情況下被記憶

@@ -1,0 +1,19 @@
+<!-- 在chapter.7的部份 , 我們加入對partials模板的引用 -->
+
+
+<h1>Welcome to Meadowlark Travle</h1>
+
+<p>
+    Check out the below link!
+    <a href="/about" data-test-id="about" >About us</a>
+
+    <br></br>
+    
+    <p>Wecome to Meadowlark Travel!  Please <a href="/api/newsletter">sign up for our newsletter</a>!</p>
+    <p>Check out our <a href="/vacations">vacation packages!</a>!</p>
+    <p>Also, please enter our <a href="/api/contest/vacation-photo-ajax">Vacation Photo Contest</a>!</p>
+
+
+    
+    {{> weather}}
+</p>
