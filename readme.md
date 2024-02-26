@@ -55,3 +55,20 @@
 >3. 使用MongoDB的ODM mongoose來定義資料Schema , 並實做抽象層中的取得資料與更新資料
 >4. 使用線上Postgre服務，連接與實現取資料和更新
 >5. 使用線上Redis服務，將Session store以Redis進行保存，讓使用者選取的幣值模式能夠在即使Server重啟的情況下被記憶
+
+### route : 
+
+    介紹URL與路由的相關概念，並說明在Express的路由處理式中的一些常見用法與設計準則
+    
+>1. URL與SEO基本概念，在Express中組織路由式的基本準則
+>2. 在一個路由中串連多個處理式作為篩選,驗證等簡單功能.
+>3. 使用路由參數將URL作為處理式參數的一部份
+>4. 自動算繪view的路由
+
+### restapi :
+
+    介紹REST API , 基於13章的網站版本加入四個REST API實做與簡易測試
+
+>1. RESTful API概念介紹,Express設定CORS
+>2. 製作RESTAPI的路由處理式，以及相應.test.js，接入主程式進行測試
+
