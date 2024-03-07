@@ -1,0 +1,79 @@
+<h2>Meadowlark Travel Newsletter</h2>
+
+<!-- 
+    Ch13, 使用ch8時實做的fetchAPI傳送表單 , 基本上內容沒動
+
+    這邊要製作使用fetch api去傳送的表單內容 , 我們不需要指定form的action與method , 
+    並且將表單包在div中,讓下面的script能去listen這裡面的sumbit事件 .
+    其他的內容就和原本的newsletter-signup一模一樣
+-->
+
+<div id="newsletterSignupFormContainer">
+
+  <form class="form-horizontal" role="form" id="newsletterSignupForm">
+
+    <input type="hidden" name="_csrf" value="{{csrf}}">
+
+    <div class="form-group">
+      <label for="fieldName" class="col-sm-2 control-label">Name</label>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" id="fieldName" name="name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+      <div class="col-sm-4">
+        <input type="email" class="form-control" required id="fieldEmail" name="email">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-4">
+        <button type="submit" class="btn btn-primary">Register</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+
+<!-- 
+    這邊加入的script是用來主動攔截表單的提交事件並且將他取消 , 我們要自己手動改用fetch去傳送資料
+-->
+{{#section 'scripts'}}
+<script>
+  console.log("Sctipt Test") ; 
+  document.getElementById('newsletterSignupForm')
+    .addEventListener('submit', evt => {
+      evt.preventDefault()
+      const form = evt.target
+      
+      // 自己製作新的header , body 
+      const headers = { 'Content-Type': 'application/json' }
+      // 用JSON整理表單的內容
+      const body = JSON.stringify({
+        _csrf: form.elements._csrf.value,
+        name: form.elements.name.value,
+        email: form.elements.email.value,
+      })
+
+      const container = document.getElementById('newsletterSignupFormContainer')
+
+      // 透過fetch來發出重新發出表單內容 
+      fetch('/api/newsletter-signup', { method: 'post', body, headers })
+        .then(resp => {
+          if(resp.status < 200 || resp.status >= 300)
+            throw new Error(`Request failed with status ${resp.status}`)
+          return resp.json()
+        })
+        .then(json => {
+          container.innerHTML = '<b>Thank you for signing up!</b>' + '<a href="/">Home</a>' 
+        })
+        .catch(err => {
+          container.innerHTML = `<b>We're sorry, we had a problem ` +
+            `signing you up.  Please <a href="/newsletter">try again</a>` ; 
+        })
+  })
+</script>
+{{/section}}

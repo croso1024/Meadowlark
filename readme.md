@@ -72,3 +72,11 @@
 >1. RESTful API概念介紹,Express設定CORS
 >2. 製作RESTAPI的路由處理式，以及相應.test.js，接入主程式進行測試
 
+### Single Paga Application : 
+
+    介紹SPA架構與SSR的差異與優點，我們要在這一章使用React來建立UI,將Express單獨用來提供前一章所完成的REST API端點
+    最後將前端部份打包,由Express統一提供我們的App
+
+>1. React & React route , 建立主畫面以及Link
+>2. 實做Vacations / vacation / notify 元件，透過fetch向Server取得資料/傳遞資料後進行渲染
+>3. 透過build,將CRA開發Server打包起來放到我們的Express public , 透過static中介函式來傳遞前端包給client.

@@ -1,0 +1,30 @@
+{{!  
+    這部份是chapter7加入的 partials模板 , 注意到說我們是使用 partials.weatherContext 來作為 context物件的namespace ,  
+    這樣做是因為我們不能讓這個模板的內容干擾的原本view的context物件 ,  我們使用express的res.locals來做 (res.locals就是傳入頁面的context物件)!? 
+
+    至於名稱叫做weatherContext是因為在模板中引入partials物件的方法
+}}
+
+{{#section 'head'}}
+  <style>
+    .weatherWidget {
+      border: solid 1px blue;
+      margin: 4px;
+      padding: 4px;
+    }
+  </style>
+{{/section}}
+
+<div class="weatherWidget">
+  {{#each partials.weatherContext}}
+    <div class="location">
+      <h3>{{location.name}}</h3>
+      {{!-- <a href="{{location.forecastUrl}}"> --}}
+        <a href="{{forecastUrl}}">
+        <img src="{{iconUrl}}" alt="{{weather}}">
+        {{weather}}  {{temp}}
+      </a>
+    </div>
+  {{/each}}
+  <small>Source: <a href="https://openweathermap.org">OpenWeatherMap</a></small>
+</div>
