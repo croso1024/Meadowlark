@@ -1,0 +1,34 @@
+<!-- 在chapter.7的部份 , 我們加入對partials模板的引用 -->
+
+
+<h1>Welcome to Meadowlark Travle</h1>
+
+<p>
+    Check out the below link!
+    <a href="/about" data-test-id="about" >About us</a>
+
+    <br></br>
+    
+    <p>Wecome to Meadowlark Travel!  Please <a href="/api/newsletter">sign up for our newsletter</a>!</p>
+    <p>Check out our <a href="/vacations">vacation packages!</a>!</p>
+    <p>Also, please enter our <a href="/api/contest/vacation-photo-ajax">Vacation Photo Contest</a>!</p>
+    <p><a href="/account">View the account page ,Please login first !</a></p>
+
+
+    {{#if username}} 
+        <p>Welcome , {{username}}</p>
+        <p><a href="/logout">Sign-out</a></p>
+    {{else}}
+        <p>Log-in options:</p>
+        <ul>
+            <li><a href="/auth/facebook/"> Login with facebook account </a> </li>
+            <li><a href="/auth/google/"> Login with google account </a> </li>
+        </ul>
+    {{/if }}
+
+    {{#if employee}} 
+    <p><strong>EXTRA CONTNET by certain role</strong></p>
+    {{/if}}
+    
+    {{> weather}}
+</p>

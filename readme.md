@@ -59,7 +59,7 @@
 ### route : 
 
     介紹URL與路由的相關概念，並說明在Express的路由處理式中的一些常見用法與設計準則
-    
+
 >1. URL與SEO基本概念，在Express中組織路由式的基本準則
 >2. 在一個路由中串連多個處理式作為篩選,驗證等簡單功能.
 >3. 使用路由參數將URL作為處理式參數的一部份
@@ -80,3 +80,18 @@
 >1. React & React route , 建立主畫面以及Link
 >2. 實做Vacations / vacation / notify 元件，透過fetch向Server取得資料/傳遞資料後進行渲染
 >3. 透過build,將CRA開發Server打包起來放到我們的Express public , 透過static中介函式來傳遞前端包給client.
+
+### meadowlark_security
+
+    份量最大的一章，在這一節開始主要就是加入HTTPS以及身份授權的內容。
+    前半部份在我們的Web中透過憑證來啟動HTTPS server,說明並防禦CSRF攻擊.
+    後半大部分開始介紹身份驗證的相關內容，建立User的資料模型並在DB層加入對應新增,檢查操作。透過Passport套件走一次完整的Facebook,Google第三方驗證流程。
+    
+    說明三方CA簽章的流程並透過生成自己的cert去建立不受信任的HTTPS連線來測試。另一方面也應用了express的csrf套件在POST request中加入csrf token,去規避或著重新導向那些不帶token的可能非安全表單請求。
+
+>1. HTTPS與三方CA簽署相關介紹，生成自己的key pair建立不受信任的HTTPS server
+>2. CSRF攻擊,透過csurf middleware給使用者在request中帶csur token,並規避不帶token的POST request
+>3. 身份驗證流程, 建立User資料模型與抽象層API
+>4. 透過Passport套件，完成Facebook , Google第三方授權驗證登入流程
+>5. 依據使用者屬性進行條件渲染
+

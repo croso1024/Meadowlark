@@ -11,7 +11,14 @@ app.use((req, res, next) => {
 	next()
 })
 
-app.use((req, res, next) => {
+// app.use((req, res, next) => {
+// 	console.log('terminating request')
+// 	// next() ; 
+// 	res.send('thanks for playing!')	
+// 	// note that we do NOT call next() here...this terminates the request
+// })
+
+app.use((req, res,next) => {
 	console.log('terminating request')
 	// next() ; 
 	res.send('thanks for playing!')	
